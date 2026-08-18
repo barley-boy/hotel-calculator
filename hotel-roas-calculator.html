@@ -1,0 +1,43 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Hotel ROAS Calculator | Hotel Calculator</title><meta name="description" content="Calculate hotel ROAS, cost per booking, revenue per booking, advertising cost share, and target revenue."><link rel="canonical" href="https://hotel-calculator.com/hotel-roas-calculator.html"><link rel="stylesheet" href="styles.css"><!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-4QYM11S0E2"></script>
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-4QYM11S0E2');
+</script></head><body><header class="site-header"><div class="container nav"><a class="brand" href="/">Hotel<span>Calculator</span></a><nav class="nav-links"><a href="/#calculators">Calculators</a><a href="about.html">About</a><a class="nav-cta" href="direct-booking-roi.html">Use Calculator</a></nav></div></header><section class="page-hero"><div class="container"><div class="eyebrow">Hotel marketing calculator</div><h1>Hotel ROAS Calculator</h1><p>Calculate hotel return on ad spend, cost per booking, revenue per booking, and the revenue required to hit your target ROAS.</p></div></section><main class="container"><div class="tool-grid"><section class="tool-panel"><h2>Enter campaign data</h2>
+<div class="field"><label>Advertising spend</label><div class="input-wrap"><span class="prefix">$</span><input id="adSpend" class="has-prefix" type="number" value="10000"></div></div>
+<div class="field"><label>Attributed booking revenue</label><div class="input-wrap"><span class="prefix">$</span><input id="bookingRevenue" class="has-prefix" type="number" value="50000"></div></div>
+<div class="field"><label>Attributed bookings</label><input id="bookingCount" type="number" value="125"></div>
+<div class="field"><label>Target ROAS</label><div class="input-wrap"><input id="targetRoas" class="has-suffix" type="number" value="5" step="0.1"><span class="suffix">×</span></div><div class="hint">Example: enter 5 for a 5.0× target ROAS.</div></div>
+<button class="reset" onclick="resetRoas()">Reset defaults</button></section>
+<section class="tool-panel"><h2>Estimated results</h2><div class="results">
+<div class="metric primary"><div class="label">ROAS</div><div class="value" id="roasOut">—</div><div class="sub">revenue ÷ ad spend</div></div>
+<div class="metric"><div class="label">Cost per booking</div><div class="value" id="cpbOut">—</div><div class="sub">ad spend ÷ bookings</div></div>
+<div class="metric"><div class="label">Revenue per booking</div><div class="value" id="rpbOut">—</div><div class="sub">revenue ÷ bookings</div></div>
+<div class="metric"><div class="label">Ad cost as % of revenue</div><div class="value" id="costShareOut">—</div><div class="sub">inverse of ROAS</div></div>
+<div class="metric primary"><div class="label">Revenue needed at target ROAS</div><div class="value" id="targetRevenueOut">—</div><div class="sub">ad spend × target ROAS</div></div>
+<div class="metric"><div class="label">Revenue gap to target</div><div class="value" id="gapOut">—</div><div class="sub">positive means more revenue needed</div></div>
+</div><div class="insight" id="roasInsight">—</div><div class="disclaimer">ROAS measures attributed revenue relative to advertising spend. It does not include hotel operating costs, cancellations, taxes, commissions, or incrementality.</div></section></div>
+<div class="ad-slot">Future advertising placement</div>
+<div class="content-wrap"><article class="article"><h2>What is hotel ROAS?</h2><p>Hotel ROAS, or return on ad spend, measures how much attributed booking revenue is generated for each dollar spent on advertising. A 5.0× ROAS means $5 in attributed booking revenue for every $1 in ad spend.</p><h2>How is hotel ROAS calculated?</h2><p>Divide attributed booking revenue by advertising spend. If a hotel spends $10,000 and attributes $50,000 in booking revenue to those campaigns, ROAS is 5.0×.</p><h2>What is a good hotel ROAS?</h2><p>There is no universal target. The right ROAS depends on contribution margin, cancellation rates, channel mix, brand strategy, incrementality, and whether the campaign is acquiring new demand or capturing demand that already existed.</p><h2>Why cost per booking matters</h2><p>Cost per booking can be easier to compare across campaigns and properties than ROAS alone, especially when average booking values differ.</p></article><aside><div class="sidebar-box"><strong>Related calculators</strong><a href="direct-booking-roi.html">Direct Booking ROI</a><a href="ota-commission-calculator.html">OTA Commission</a><a href="/">All calculators</a></div></aside></div></main><footer class="footer"><div class="container footer-inner"><div>© 2026 Hotel Calculator</div><div class="footer-links"><a href="about.html">About</a><a href="privacy.html">Privacy</a><a href="terms.html">Terms</a></div></div></footer><script>
+["adSpend","bookingRevenue","bookingCount","targetRoas"].forEach(id=>document.getElementById(id).addEventListener("input",calcRoas));
+let roasTracked=false;
+function v(id){return Math.max(0,parseFloat(document.getElementById(id).value)||0)}
+function usd(x){return x.toLocaleString("en-US",{style:"currency",currency:"USD",maximumFractionDigits:0})}
+function calcRoas(){
+ const spend=v("adSpend"), revenue=v("bookingRevenue"), bookings=v("bookingCount"), target=v("targetRoas");
+ const roas=spend?revenue/spend:0, cpb=bookings?spend/bookings:0, rpb=bookings?revenue/bookings:0;
+ const share=revenue?spend/revenue*100:0, targetRevenue=spend*target, gap=targetRevenue-revenue;
+ roasOut.textContent=roas.toFixed(2)+"×";
+ cpbOut.textContent=usd(cpb);
+ rpbOut.textContent=usd(rpb);
+ costShareOut.textContent=share.toFixed(1)+"%";
+ targetRevenueOut.textContent=usd(targetRevenue);
+ gapOut.textContent=(gap>=0?"":"-")+usd(Math.abs(gap));
+ roasInsight.textContent=gap>0?`Your current ROAS is ${roas.toFixed(2)}×. To reach a ${target.toFixed(1)}× target at the same ad spend, attributed booking revenue would need to increase by about ${usd(gap)}.`:`Your current ROAS is ${roas.toFixed(2)}×, which is at or above the ${target.toFixed(1)}× target entered.`;
+ if(!roasTracked&&spend>0&&revenue>0){roasTracked=true;if(typeof gtag==="function")gtag("event","calculator_use",{calculator_name:"hotel_roas"});}
+}
+function resetRoas(){adSpend.value=10000;bookingRevenue.value=50000;bookingCount.value=125;targetRoas.value=5;calcRoas()}
+calcRoas();
+</script></body></html>
