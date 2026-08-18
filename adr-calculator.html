@@ -1,0 +1,27 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Hotel ADR Calculator | Average Daily Rate Calculator</title><meta name="description" content="Calculate hotel ADR from room revenue and rooms sold, and compare revenue at a target ADR."><link rel="canonical" href="https://hotel-calculator.com/adr-calculator.html"><link rel="stylesheet" href="styles.css"><!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-4QYM11S0E2"></script>
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-4QYM11S0E2');
+</script></head><body><header class="site-header"><div class="container nav"><a class="brand" href="/">Hotel<span>Calculator</span></a><nav class="nav-links"><a href="/#calculators">Calculators</a><a href="about.html">About</a><a class="nav-cta" href="hotel-roas-calculator.html">Use Calculator</a></nav></div></header><section class="page-hero"><div class="container"><div class="eyebrow">Hotel revenue calculator</div><h1>Hotel ADR Calculator</h1><p>Calculate average daily rate (ADR) from room revenue and rooms sold, then see how revenue changes at different ADR levels.</p></div></section><main class="container"><div class="tool-grid"><section class="tool-panel"><h2>Enter hotel data</h2>
+<div class="field"><label>Room revenue</label><div class="input-wrap"><span class="prefix">$</span><input id="roomRevenue" class="has-prefix" type="number" value="75000"></div></div>
+<div class="field"><label>Rooms sold</label><input id="roomsSold" type="number" value="300"></div>
+<div class="field"><label>Target ADR</label><div class="input-wrap"><span class="prefix">$</span><input id="targetAdr" class="has-prefix" type="number" value="275"></div><div class="hint">Optional comparison target.</div></div>
+<button class="reset" onclick="resetAdr()">Reset defaults</button></section>
+<section class="tool-panel"><h2>Estimated results</h2><div class="results">
+<div class="metric primary"><div class="label">Average Daily Rate (ADR)</div><div class="value" id="adrOut">—</div><div class="sub">room revenue ÷ rooms sold</div></div>
+<div class="metric"><div class="label">Revenue at target ADR</div><div class="value" id="targetRevenueOut">—</div><div class="sub">rooms sold × target ADR</div></div>
+<div class="metric"><div class="label">Revenue difference</div><div class="value" id="adrGapOut">—</div><div class="sub">target revenue minus current revenue</div></div>
+<div class="metric"><div class="label">ADR change needed</div><div class="value" id="adrChangeOut">—</div><div class="sub">target vs. current ADR</div></div>
+</div><div class="insight" id="adrInsight">—</div><div class="disclaimer">ADR measures room revenue per room sold. It does not include occupancy or revenue from food, beverage, parking, resort fees, or other hotel departments.</div></section></div>
+<div class="ad-slot">Future advertising placement</div>
+<div class="content-wrap"><article class="article"><h2>What is hotel ADR?</h2><p>ADR stands for average daily rate. It measures average room revenue earned for each room sold during a period.</p><h2>How do you calculate ADR?</h2><p>Divide room revenue by the number of rooms sold. For example, $75,000 in room revenue from 300 rooms sold produces an ADR of $250.</p><h2>Why ADR matters</h2><p>ADR is one of the core hotel performance metrics. It helps revenue teams evaluate pricing performance, but it should be considered alongside occupancy and RevPAR.</p></article><aside><div class="sidebar-box"><strong>Related calculators</strong><a href="revpar-calculator.html">RevPAR Calculator</a><a href="/">All calculators</a></div></aside></div></main><footer class="footer"><div class="container footer-inner"><div>© 2026 Hotel Calculator</div><div class="footer-links"><a href="about.html">About</a><a href="privacy.html">Privacy</a><a href="terms.html">Terms</a></div></div></footer><script>
+["roomRevenue","roomsSold","targetAdr"].forEach(id=>document.getElementById(id).addEventListener("input",calcAdr));
+let adrTracked=false;
+function av(id){return Math.max(0,parseFloat(document.getElementById(id).value)||0)}
+function ausd(x){return x.toLocaleString("en-US",{style:"currency",currency:"USD",maximumFractionDigits:2})}
+function calcAdr(){const revenue=av("roomRevenue"),rooms=av("roomsSold"),target=av("targetAdr"),adr=rooms?revenue/rooms:0,targetRevenue=rooms*target,gap=targetRevenue-revenue,change=adr?((target-adr)/adr)*100:0;adrOut.textContent=ausd(adr);targetRevenueOut.textContent=ausd(targetRevenue);adrGapOut.textContent=(gap>=0?"":"-")+ausd(Math.abs(gap));adrChangeOut.textContent=(change>=0?"+":"")+change.toFixed(1)+"%";adrInsight.textContent=`Your current ADR is ${ausd(adr)}. At the same ${rooms.toLocaleString()} rooms sold, a ${ausd(target)} ADR would produce about ${ausd(targetRevenue)} in room revenue.`;if(!adrTracked&&revenue>0&&rooms>0){adrTracked=true;if(typeof gtag==="function")gtag("event","calculator_use",{calculator_name:"hotel_adr"});}}
+function resetAdr(){roomRevenue.value=75000;roomsSold.value=300;targetAdr.value=275;calcAdr()}calcAdr();
+</script></body></html>
