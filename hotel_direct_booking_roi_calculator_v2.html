@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hotel Direct Booking ROI Calculator v2</title>
+<style>
+*{box-sizing:border-box}body{margin:0;font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:#f5f6f8;color:#17202a}
+.wrap{max-width:1120px;margin:auto;padding:38px 20px 60px}.hero{margin-bottom:25px}.eyebrow{text-transform:uppercase;letter-spacing:.12em;font-size:12px;font-weight:700;color:#667085}
+h1{font-size:38px;line-height:1.1;margin:8px 0 12px}.hero p{max-width:760px;color:#667085;font-size:17px;line-height:1.55;margin:0}
+.grid{display:grid;grid-template-columns:1fr 1.25fr;gap:22px}.card{background:#fff;border:1px solid #e4e7ec;border-radius:16px;padding:24px;box-shadow:0 5px 18px rgba(16,24,40,.05)}
+h2{margin:0 0 18px;font-size:20px}.toggle{display:grid;grid-template-columns:1fr 1fr;border:1px solid #d0d5dd;border-radius:10px;padding:3px;margin-bottom:22px}
+.toggle button{border:0;background:transparent;color:#667085;padding:10px 8px;border-radius:7px;font-weight:700;cursor:pointer}.toggle button.active{background:#17202a;color:#fff}
+.field{margin-bottom:17px}label{display:block;font-size:13px;font-weight:650;margin-bottom:7px}.hint{font-size:11px;color:#98a2b3;margin-top:5px}
+.input-wrap{position:relative}.prefix,.suffix{position:absolute;top:50%;transform:translateY(-50%);color:#667085;pointer-events:none}.prefix{left:12px}.suffix{right:12px}
+input{width:100%;border:1px solid #d0d5dd;border-radius:9px;padding:11px 12px;font-size:15px;outline:none;background:#fff}input:focus{border-color:#667085;box-shadow:0 0 0 3px rgba(102,112,133,.12)}
+.has-prefix{padding-left:27px}.has-suffix{padding-right:30px}.hidden{display:none}
+.results{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}.metric{border:1px solid #eaecf0;border-radius:12px;padding:16px;background:#fcfcfd}.metric.primary{background:#f2f4f7;border-color:#d0d5dd}
+.metric .label{color:#667085;font-size:12px;margin-bottom:6px}.metric .value{font-size:25px;font-weight:750;letter-spacing:-.02em}.metric .sub{font-size:11px;color:#98a2b3;margin-top:5px}
+.insight{margin-top:16px;padding:16px;border-radius:12px;background:#f9fafb;border:1px solid #eaecf0;line-height:1.5;font-size:14px}
+.bar{margin-top:20px}.bar-title{display:flex;justify-content:space-between;font-size:13px;font-weight:650;margin-bottom:8px}.track{height:12px;background:#eaecf0;border-radius:99px;overflow:hidden}.fill{height:100%;width:50%;background:#344054;border-radius:99px;transition:width .2s}
+button.reset{border:0;border-radius:9px;padding:11px 15px;font-weight:700;cursor:pointer;background:#17202a;color:#fff;margin-top:4px}
+.foot{margin-top:22px;color:#667085;font-size:12px;line-height:1.5}
+@media(max-width:800px){.grid{grid-template-columns:1fr}h1{font-size:31px}}@media(max-width:500px){.results{grid-template-columns:1fr}.wrap{padding-top:25px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<div class="hero">
+<div class="eyebrow">Hotel Marketing Tool · Version 2</div>
+<h1>How Much Are Your Direct Bookings Really Worth?</h1>
+<p>Estimate your hotel's direct-booking economics, advertising efficiency, and the potential cost advantage versus OTA bookings—without requiring website traffic data.</p>
+</div>
+
+<div class="grid">
+<section class="card">
+<h2>Enter your hotel data</h2>
+
+<div class="toggle">
+<button id="knownBtn" class="active" onclick="setMode('known')">I know my bookings</button>
+<button id="estimateBtn" onclick="setMode('estimate')">Estimate bookings</button>
+</div>
+
+<div class="field">
+<label for="spend">Monthly advertising spend</label>
+<div class="input-wrap"><span class="prefix">$</span><input id="spend" class="has-prefix" type="number" value="10000" min="0" step="100"></div>
+</div>
+
+<div id="knownFields">
+<div class="field">
+<label for="bookings">Monthly bookings attributed to advertising</label>
+<div class="input-wrap"><input id="bookings" type="number" value="125" min="0" step="1"></div>
+<div class="hint">Use your best available attribution number.</div>
+</div>
+</div>
+
+<div id="estimateFields" class="hidden">
+<div class="field">
+<label for="visits">Monthly website visits</label>
+<div class="input-wrap"><input id="visits" type="number" value="25000" min="0" step="100"></div>
+</div>
+<div class="field">
+<label for="conversion">Website booking conversion rate</label>
+<div class="input-wrap"><input id="conversion" class="has-suffix" type="number" value="1.5" min="0" max="100" step="0.1"><span class="suffix">%</span></div>
+</div>
+</div>
+
+<div class="field">
+<label for="adr">Average daily rate (ADR)</label>
+<div class="input-wrap"><span class="prefix">$</span><input id="adr" class="has-prefix" type="number" value="250" min="0" step="5"></div>
+</div>
+
+<div class="field">
+<label for="los">Average length of stay</label>
+<div class="input-wrap"><input id="los" class="has-suffix" type="number" value="3.2" min="0" step="0.1"><span class="suffix">nights</span></div>
+</div>
+
+<div class="field">
+<label for="ota">OTA commission rate</label>
+<div class="input-wrap"><input id="ota" class="has-suffix" type="number" value="18" min="0" max="100" step="1"><span class="suffix">%</span></div>
+</div>
+
+<div class="field">
+<label for="directCost">Direct booking variable cost</label>
+<div class="input-wrap"><input id="directCost" class="has-suffix" type="number" value="3" min="0" max="100" step="0.5"><span class="suffix">%</span></div>
+<div class="hint">Payment processing, booking engine, and other variable direct costs.</div>
+</div>
+
+<button class="reset" onclick="resetDefaults()">Reset defaults</button>
+</section>
+
+<section class="card">
+<h2>Estimated results</h2>
+<div class="results">
+<div class="metric primary"><div class="label">Estimated booking revenue</div><div class="value" id="revenue">—</div><div class="sub">per month</div></div>
+<div class="metric primary"><div class="label">ROAS</div><div class="value" id="roas">—</div><div class="sub">revenue ÷ ad spend</div></div>
+<div class="metric"><div class="label">Bookings</div><div class="value" id="bookingOut">—</div><div class="sub">per month</div></div>
+<div class="metric"><div class="label">Cost per booking</div><div class="value" id="cpa">—</div><div class="sub">advertising only</div></div>
+<div class="metric"><div class="label">Revenue per booking</div><div class="value" id="revBooking">—</div><div class="sub">ADR × average stay</div></div>
+<div class="metric"><div class="label">OTA commission</div><div class="value" id="otaCost">—</div><div class="sub">same revenue via OTA</div></div>
+<div class="metric primary"><div class="label">Direct booking savings</div><div class="value" id="savings">—</div><div class="sub">OTA commission avoided</div></div>
+<div class="metric"><div class="label">Net after ad + direct costs</div><div class="value" id="net">—</div><div class="sub">simplified contribution view</div></div>
+</div>
+
+<div class="bar">
+<div class="bar-title"><span>Distribution cost</span><span id="costRate">—</span></div>
+<div class="track"><div class="fill" id="fill"></div></div>
+</div>
+
+<div class="insight" id="insight">—</div>
+<div class="foot">This planning model does not account for taxes, cancellations, refunds, room costs, labor, or other hotel operating expenses. Advertising attribution can also vary significantly by platform.</div>
+</section>
+</div>
+</div>
+
+<script>
+let mode="known";
+const ids=["spend","bookings","visits","conversion","adr","los","ota","directCost"];
+ids.forEach(id=>document.getElementById(id).addEventListener("input",calculate));
+
+function n(id){return Math.max(0,parseFloat(document.getElementById(id).value)||0)}
+function money(x){return x.toLocaleString("en-US",{style:"currency",currency:"USD",maximumFractionDigits:0})}
+
+function setMode(m){
+ mode=m;
+ document.getElementById("knownFields").classList.toggle("hidden",m!=="known");
+ document.getElementById("estimateFields").classList.toggle("hidden",m!=="estimate");
+ document.getElementById("knownBtn").classList.toggle("active",m==="known");
+ document.getElementById("estimateBtn").classList.toggle("active",m==="estimate");
+ calculate();
+}
+
+function calculate(){
+ const spend=n("spend"), adr=n("adr"), los=n("los"), ota=n("ota")/100, direct=n("directCost")/100;
+ const revenuePerBooking=adr*los;
+ let bookings=mode==="known"?n("bookings"):n("visits")*(n("conversion")/100);
+ const revenue=bookings*revenuePerBooking;
+ const roas=spend>0?revenue/spend:0;
+ const cpa=bookings>0?spend/bookings:0;
+ const otaCost=revenue*ota;
+ const directCost=revenue*direct;
+ const savings=otaCost-directCost;
+ const net=revenue-directCost-spend;
+ document.getElementById("revenue").textContent=money(revenue);
+ document.getElementById("roas").textContent=roas.toFixed(2)+"×";
+ document.getElementById("bookingOut").textContent=bookings.toLocaleString("en-US",{maximumFractionDigits:0});
+ document.getElementById("cpa").textContent=money(cpa);
+ document.getElementById("revBooking").textContent=money(revenuePerBooking);
+ document.getElementById("otaCost").textContent=money(otaCost);
+ document.getElementById("savings").textContent=money(savings);
+ document.getElementById("net").textContent=money(net);
+ document.getElementById("costRate").textContent=`Direct ${(direct*100).toFixed(1)}% vs. OTA ${(ota*100).toFixed(1)}%`;
+ document.getElementById("fill").style.width=Math.min(100,(direct/(ota||1))*100)+"%";
+
+ let msg;
+ if(bookings===0) msg="Enter your booking information to see the model.";
+ else if(roas<2) msg=`Your modeled ROAS is ${roas.toFixed(2)}×. At this level, improving acquisition cost, conversion, or booking value may be more important than increasing spend.`;
+ else if(roas<4) msg=`Your modeled ROAS is ${roas.toFixed(2)}×. There may be opportunities to improve efficiency before scaling the budget.`;
+ else msg=`Your modeled ROAS is ${roas.toFixed(2)}×. If these inputs are reliable, your advertising may have room to support additional qualified demand.`;
+ if(savings>0) msg+=` Your direct bookings avoid about ${money(savings)} in OTA commission each month compared with generating the same revenue through an OTA.`;
+ document.getElementById("insight").textContent=msg;
+}
+
+function resetDefaults(){
+ document.getElementById("spend").value=10000;
+ document.getElementById("bookings").value=125;
+ document.getElementById("visits").value=25000;
+ document.getElementById("conversion").value=1.5;
+ document.getElementById("adr").value=250;
+ document.getElementById("los").value=3.2;
+ document.getElementById("ota").value=18;
+ document.getElementById("directCost").value=3;
+ setMode("known");
+}
+calculate();
+</script>
+</body>
+</html>
