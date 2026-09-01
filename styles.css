@@ -11,3 +11,37 @@
 .guide-table{width:100%;border-collapse:collapse;margin:18px 0}.guide-table th,.guide-table td{border-bottom:1px solid var(--line);padding:12px 10px;text-align:left;vertical-align:top}.guide-table td{color:#475467}
 .kpi-strip{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:20px 0}.kpi-box{background:#fff;border:1px solid var(--line);border-radius:12px;padding:16px}.kpi-box strong{display:block;font-size:20px}.kpi-box span{color:var(--muted);font-size:12px}
 @media(max-width:760px){.cluster-links,.kpi-strip{grid-template-columns:1fr}}
+
+/* V8.1 related-resource card formatting fix */
+.cluster-links{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:16px;
+  margin:24px 0;
+}
+.cluster-links .cluster-link{
+  display:block;
+  box-sizing:border-box;
+  width:100%;
+  min-width:0;
+  padding:18px 20px;
+  border:1px solid var(--line);
+  border-radius:14px;
+  background:#fff;
+  text-decoration:none;
+  line-height:1.45;
+}
+.cluster-links .cluster-link strong{
+  display:block;
+  margin:0 0 6px;
+  line-height:1.3;
+}
+.cluster-links .cluster-link span{
+  display:block;
+  color:var(--muted);
+  font-size:13px;
+  line-height:1.5;
+}
+@media(max-width:760px){
+  .cluster-links{grid-template-columns:1fr;}
+}
