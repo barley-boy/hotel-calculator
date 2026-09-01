@@ -1,0 +1,1 @@
+V8: new Occupancy Rate Calculator; new OTA Commission Rates Guide; expanded RevPAR content; stronger ADR/Occupancy/RevPAR and OTA/Direct/ROAS internal linking; updated homepage, metrics hub and sitemap; client-side HTTP-to-HTTPS safeguard. GitHub Pages controls the actual server-side redirect.
