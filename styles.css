@@ -47,3 +47,10 @@
 }
 
 .metric-path{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;margin:24px 0}.metric-path a{display:block;padding:18px;border:1px solid var(--line);border-radius:14px;background:#fff;text-decoration:none}.metric-path strong,.metric-path span{display:block}.metric-path span{color:var(--muted);font-size:13px;margin-top:5px}.formula-box{padding:18px;border:1px solid var(--line);border-radius:14px;background:#fff;margin:18px 0;font-weight:700}@media(max-width:850px){.metric-path{grid-template-columns:repeat(2,1fr)}}@media(max-width:560px){.metric-path{grid-template-columns:1fr}}
+
+/* V10 SEO guidance */
+.v10-guide,.v10-faq,.v10-feature{margin:28px 0;padding:22px;border:1px solid #dfe5ef;border-radius:14px;background:#fff;line-height:1.7}
+.v10-guide h2,.v10-faq h2,.v10-feature h2{margin-top:0}
+.v10-guide h3,.v10-faq h3{margin-top:20px;margin-bottom:6px}
+.v10-guide p,.v10-faq p{margin-top:8px}
+@media(max-width:600px){.v10-guide,.v10-faq,.v10-feature{padding:16px}}
